@@ -7,9 +7,15 @@
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/left.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/refresh.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_contact.xml" value="0.102" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.17239583333333333" />
+        <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/activity_toolbar.xml" value="0.18802083333333333" />
         <entry key="app/src/main/res/layout/activity_whatsapp_web.xml" value="0.13148148148148148" />
+        <entry key="app/src/main/res/layout/navigation_header.xml" value="0.1875" />
+        <entry key="app/src/main/res/layout/privacy_policy_activity.xml" value="0.1875" />
+        <entry key="app/src/main/res/menu/navigation_drawer.xml" value="0.1875" />
+        <entry key="app/src/main/res/menu/navigation_menu.xml" value="0.1875" />
       </map>
     </option>
   </component>

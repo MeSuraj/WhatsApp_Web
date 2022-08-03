@@ -3,6 +3,7 @@ package learn.zero.say.whatsweb;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -13,6 +14,8 @@ import android.text.format.DateFormat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.PermissionRequest;
 import android.webkit.ValueCallback;
@@ -22,10 +25,18 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.InputDeviceCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,9 +45,18 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
+import learn.zero.say.whatsweb.Activity.PrivacyPolicy;
 
 
 public class WhatsWeb extends AppCompatActivity {
+
+    //Dark and Day Mode
+    SharedPreferences sharedPreferences;
+    boolean isDarkModeOn;
+    SharedPreferences.Editor editor;
+
+
+    //WebView
     private static ValueCallback<Uri[]> mUploadMessageArr;
     String tag = WhatsWeb.class.getSimpleName();
     private ImageView ivRefresh;
@@ -49,24 +69,80 @@ public class WhatsWeb extends AppCompatActivity {
     public void onCreate(Bundle bundle) {
 //        Utils.loadLocale(this);
         super.onCreate(bundle);
-        setContentView(R.layout.activity_whatsapp_web);
+        setContentView(R.layout.activity_main);
+
+        //Navigation Drawer
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+
+        // Toolbar view
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull @org.jetbrains.annotations.NotNull MenuItem item) {
+
+                int id = item.getItemId();
+                drawerLayout.closeDrawer(GravityCompat.START);
+                switch (id)
+                {
+
+                    case R.id.navMessage:
+                        Toast.makeText(WhatsWeb.this, "Send Message", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case R.id.navShare:
+                        String appUrl = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+                        Intent sharing = new Intent(Intent.ACTION_SEND);
+                        sharing.setType("text/plain");
+                        sharing.putExtra(Intent.EXTRA_SUBJECT, "Download Now");
+                        sharing.putExtra(Intent.EXTRA_TEXT, appUrl);
+                        startActivity(Intent.createChooser(sharing, "Share via"));
+                        break;
+
+                    case R.id.navContact:
+                        Intent intent = new Intent(Intent.ACTION_SENDTO);
+                        intent.setData(Uri.parse("mailto:"));
+                        // only email apps should handle this
+                        String[] to = {"thanksforcontactus@gmail.com"};
+                        intent.putExtra(Intent.EXTRA_EMAIL, to);
+                        startActivity(Intent.createChooser(intent, "Contact us!"));
+                        break;
+
+                    case R.id.navPrivacy:
+                        startActivity(new Intent(getApplicationContext(), PrivacyPolicy.class));
+                        return true;
 
 
-        //To hide action Bar(Tool Bar)
-        getSupportActionBar().hide();
+                    default:
+                        return true;
+                }
+                return true;
+            }
+        });
 
+        //Web
         getWindow().getDecorView().setSystemUiVisibility(InputDeviceCompat.SOURCE_TOUCHSCREEN);
-
+        //Refresh
         this.ivRefresh = (ImageView) findViewById(R.id.iv_refresh);
         TextView tvTitle = (TextView) findViewById(R.id.title);
         tvTitle.setText("WhatsApp Web");
         this.ivRefresh.setVisibility(View.VISIBLE);
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE",
-                            "android.permission.READ_PHONE_STATE",
+                    "android.permission.READ_PHONE_STATE",
                             "android.permission.ACCESS_COARSE_LOCATION"},
                     123);
         }
+        //webView
         this.webView = (WebView) findViewById(R.id.WebView);
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setDomStorageEnabled(true);
@@ -103,6 +179,7 @@ public class WhatsWeb extends AppCompatActivity {
         this.webView.loadUrl(sb.toString());
         this.webView.setWebChromeClient(new chromeView());
 
+        //Refresh
         this.ivRefresh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 WhatsWeb.this.getWindow().getDecorView().setSystemUiVisibility
@@ -181,7 +258,7 @@ public class WhatsWeb extends AppCompatActivity {
             WhatsWeb.this.mActivity.setTitle("  Loading ...");
             WhatsWeb.this.mActivity.setProgress(i * 100);
             if (i == 100) {
-                WhatsWeb.this.mActivity.setTitle("Whatzweb");
+                WhatsWeb.this.mActivity.setTitle("Whatsweb");
             }
             WhatsWeb.this.addcss();
         }
@@ -234,39 +311,12 @@ public class WhatsWeb extends AppCompatActivity {
     }
 
 
-    public void takeScreenshot() {
-        Date date = new Date();
-        DateFormat.format("yyyy-MM-dd_hh:mm:ss", date);
-        File file = new File(Environment.getExternalStorageDirectory().toString() +
-                "/DCIM/ClonappSS");
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        try {
-            String str = Environment.getExternalStorageDirectory().toString() + "/DCIM/ClonappSS/"
-                    + date + ".jpg";
-            View rootView = getWindow().getDecorView().getRootView();
-            rootView.setDrawingCacheEnabled(true);
-            Bitmap createBitmap = Bitmap.createBitmap(rootView.getDrawingCache());
-            rootView.setDrawingCacheEnabled(false);
-            FileOutputStream fileOutputStream = new FileOutputStream(new File(str));
-            createBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-            fileOutputStream.flush();
-            fileOutputStream.close();
-            MediaScannerConnection.scanFile(this, new String[]{str.toString()},
-                    (String[]) null, new Abc());
-        } catch (Throwable th) {
-            th.printStackTrace();
-        }
-    }
-
     class Abc implements MediaScannerConnection.OnScanCompletedListener {
         @Override
         public void onScanCompleted(String str, Uri uri) {
             //add
         }
     }
-
 
     @Override
     public void onResume() {
@@ -295,5 +345,80 @@ public class WhatsWeb extends AppCompatActivity {
     public void onStop() {
         this.webView.clearCache(true);
         super.onStop();
+    }
+
+    //Toolbar MenuItem
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.navigation_menu, menu);
+
+        //Day And Night Mode
+        sharedPreferences
+                = getSharedPreferences(
+                "sharedPrefs", MODE_PRIVATE);
+        editor
+                = sharedPreferences.edit();
+        isDarkModeOn
+                = sharedPreferences
+                .getBoolean(
+                        "isDarkModeOn", false);
+
+        final MenuItem nightMode = menu.findItem(R.id.night_mode);
+        final MenuItem dayMode = menu.findItem(R.id.day_mode);
+
+        if (isDarkModeOn) {
+            AppCompatDelegate
+                    .setDefaultNightMode(
+                            AppCompatDelegate
+                                    .MODE_NIGHT_YES);
+            dayMode.setVisible(true);
+            nightMode.setVisible(false);
+        } else {
+            AppCompatDelegate
+                    .setDefaultNightMode(
+                            AppCompatDelegate
+                                    .MODE_NIGHT_NO);
+            dayMode.setVisible(false);
+            nightMode.setVisible(true);
+
+        }
+
+        nightMode.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                AppCompatDelegate
+                        .setDefaultNightMode(
+                                AppCompatDelegate
+                                        .MODE_NIGHT_YES);
+
+                editor.putBoolean(
+                        "isDarkModeOn", true);
+                editor.apply();
+                Toast.makeText(getApplicationContext(), "Dark Mode On ", Toast.LENGTH_SHORT).show();
+                dayMode.setVisible(true);
+                nightMode.setVisible(false);
+                return true;
+            }
+        });
+
+        dayMode.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                AppCompatDelegate
+                        .setDefaultNightMode(
+                                AppCompatDelegate
+                                        .MODE_NIGHT_NO);
+                editor.putBoolean(
+                        "isDarkModeOn", false);
+                editor.apply();
+                Toast.makeText(getApplicationContext(), "Dark Mode Off", Toast.LENGTH_SHORT).show();
+                dayMode.setVisible(false);
+                nightMode.setVisible(true);
+                return true;
+
+            }
+        });
+        return true;
     }
 }

@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">WhatsApp Web</string>
+
+
+
+    <string name="share_app">Share This App</string>
+    <string name="privacy">Privacy Policy</string>
+    <string name="contact">Contact Us</string>
+    <string name="ContactUsMailId">thanksforcontactus@gmail.com</string>
+
+    <string name="splash_text">Whats Direct Message</string>
+
+    <string name="nav_header_title">WhatsApp Tools</string>
+    <string name="nav_header_subtitle">thanksforcontactus@gmail.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="home_title">Whats Direct Message</string>
+    <string name="nav_title">Learn Zero Say</string>
+    <string name="nav_subtitle">https://github.com/MeSuraj</string>
+
+    <!--    Google Ads-->
+    <string name="APP_ID">ca-app-pub-6468177929094979~9808867135</string>
+    <string name="splash_interstitial_ID">ca-app-pub-6468177929094979/5678050435</string>
+
 </resources>
