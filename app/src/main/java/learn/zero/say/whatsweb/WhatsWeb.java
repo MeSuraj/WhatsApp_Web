@@ -34,7 +34,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
-import learn.zero.say.whatsappweb.R;
 
 
 public class WhatsWeb extends AppCompatActivity {
