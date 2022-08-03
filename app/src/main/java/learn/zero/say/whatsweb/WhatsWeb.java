@@ -59,7 +59,7 @@ public class WhatsWeb extends AppCompatActivity {
     //WebView
     private static ValueCallback<Uri[]> mUploadMessageArr;
     String tag = WhatsWeb.class.getSimpleName();
-    private ImageView ivRefresh;
+//    private ImageView ivRefresh;
     final Activity mActivity = this;
     WebView webView;
 
@@ -96,7 +96,7 @@ public class WhatsWeb extends AppCompatActivity {
                 {
 
                     case R.id.navMessage:
-                        Toast.makeText(WhatsWeb.this, "Send Message", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(WhatsWeb.this, "WhatsWeb", Toast.LENGTH_SHORT).show();
                         break;
 
                     case R.id.navShare:
@@ -130,12 +130,11 @@ public class WhatsWeb extends AppCompatActivity {
         });
 
         //Web
-        getWindow().getDecorView().setSystemUiVisibility(InputDeviceCompat.SOURCE_TOUCHSCREEN);
-        //Refresh
-        this.ivRefresh = (ImageView) findViewById(R.id.iv_refresh);
-        TextView tvTitle = (TextView) findViewById(R.id.title);
-        tvTitle.setText("WhatsApp Web");
-        this.ivRefresh.setVisibility(View.VISIBLE);
+//        getWindow().getDecorView().setSystemUiVisibility(InputDeviceCompat.SOURCE_TOUCHSCREEN);
+//        //Refresh
+//        this.ivRefresh = (ImageView) findViewById(R.id.iv_refresh);
+//        this.ivRefresh.setVisibility(View.VISIBLE);
+
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE",
                     "android.permission.READ_PHONE_STATE",
@@ -179,17 +178,17 @@ public class WhatsWeb extends AppCompatActivity {
         this.webView.loadUrl(sb.toString());
         this.webView.setWebChromeClient(new chromeView());
 
-        //Refresh
-        this.ivRefresh.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                WhatsWeb.this.getWindow().getDecorView().setSystemUiVisibility
-                        (InputDeviceCompat.SOURCE_TOUCHSCREEN);
-
-                WhatsWeb.this.webView.loadUrl(sb.toString());
-                WhatsWeb.this.webView.setWebChromeClient(new chromeView());
-
-            }
-        });
+//        //Refresh
+//        this.ivRefresh.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View view) {
+//                WhatsWeb.this.getWindow().getDecorView().setSystemUiVisibility
+//                        (InputDeviceCompat.SOURCE_TOUCHSCREEN);
+//
+//                WhatsWeb.this.webView.loadUrl(sb.toString());
+//                WhatsWeb.this.webView.setWebChromeClient(new chromeView());
+//
+//            }
+//        });
     }
 
     public void addcss() {
