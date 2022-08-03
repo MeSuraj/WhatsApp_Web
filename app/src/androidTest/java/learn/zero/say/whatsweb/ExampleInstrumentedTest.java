@@ -1,4 +1,4 @@
-package learn.zero.say.whatsappweb;
+package learn.zero.say.whatsweb;
 
 import android.content.Context;
 

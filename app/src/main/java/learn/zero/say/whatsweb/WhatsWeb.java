@@ -1,4 +1,4 @@
-package learn.zero.say.whatsappweb;
+package learn.zero.say.whatsweb;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -34,10 +34,12 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
+import learn.zero.say.whatsappweb.R;
 
-public class WhatsAppWeb extends AppCompatActivity {
+
+public class WhatsWeb extends AppCompatActivity {
     private static ValueCallback<Uri[]> mUploadMessageArr;
-    String tag = WhatsAppWeb.class.getSimpleName();
+    String tag = WhatsWeb.class.getSimpleName();
     private ImageView ivRefresh;
     final Activity mActivity = this;
     WebView webView;
@@ -104,11 +106,11 @@ public class WhatsAppWeb extends AppCompatActivity {
 
         this.ivRefresh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                WhatsAppWeb.this.getWindow().getDecorView().setSystemUiVisibility
+                WhatsWeb.this.getWindow().getDecorView().setSystemUiVisibility
                         (InputDeviceCompat.SOURCE_TOUCHSCREEN);
 
-                WhatsAppWeb.this.webView.loadUrl(sb.toString());
-                WhatsAppWeb.this.webView.setWebChromeClient(new chromeView());
+                WhatsWeb.this.webView.loadUrl(sb.toString());
+                WhatsWeb.this.webView.setWebChromeClient(new chromeView());
 
             }
         });
@@ -148,12 +150,12 @@ public class WhatsAppWeb extends AppCompatActivity {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView webView, String str) {
-            String str2 = WhatsAppWeb.this.tag;
+            String str2 = WhatsWeb.this.tag;
             Log.e(str2, "shouldOverrideUrlLoading: " + str);
             if (Uri.parse(str).getHost().contains(".whatsapp.com")) {
                 return true;
             }
-            WhatsAppWeb.this.startActivity(new Intent("android.intent.action.VIEW",
+            WhatsWeb.this.startActivity(new Intent("android.intent.action.VIEW",
                     Uri.parse(str)));
             return true;
         }
@@ -165,7 +167,7 @@ public class WhatsAppWeb extends AppCompatActivity {
         @Override
         public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> valueCallback,
                                          FileChooserParams fileChooserParams) {
-            return WhatsAppWeb.this.startFileChooserIntent(valueCallback,
+            return WhatsWeb.this.startFileChooserIntent(valueCallback,
                     fileChooserParams.createIntent());
         }
 
@@ -177,12 +179,12 @@ public class WhatsAppWeb extends AppCompatActivity {
 
         @Override
         public void onProgressChanged(WebView webView, int i) {
-            WhatsAppWeb.this.mActivity.setTitle("  Loading ...");
-            WhatsAppWeb.this.mActivity.setProgress(i * 100);
+            WhatsWeb.this.mActivity.setTitle("  Loading ...");
+            WhatsWeb.this.mActivity.setProgress(i * 100);
             if (i == 100) {
-                WhatsAppWeb.this.mActivity.setTitle("Whatzweb");
+                WhatsWeb.this.mActivity.setTitle("Whatzweb");
             }
-            WhatsAppWeb.this.addcss();
+            WhatsWeb.this.addcss();
         }
     }
 

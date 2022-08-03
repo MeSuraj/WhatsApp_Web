@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "WhatsApp Web"
+rootProject.name = "WhatsWeb"
 include ':app'
